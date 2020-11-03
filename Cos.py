@@ -1,12 +1,15 @@
 import numpy as np
-from Signal import  Signal
+from Signal import Signal
+
+
 class Cos(Signal):
-    def __init__(self, phase=0, sigma=2):
+    """ Создает обьект косинус"""
+
+    def __init__(self, phase=0, sigma=0.001):
         super().__init__(name="Гармонический сигнал", phase=phase)
         self.sigma = sigma
 
     def create_signal(self):
-
         self.create_counts()
         self.create_analog()
         self.add_noise(sigma=self.sigma)
@@ -40,15 +43,13 @@ class Cos(Signal):
             if self.t_start <= t <= self.t_start + self.tau:
                 pfi = 2 * np.pi * self.fs * t + self.phase
                 counts.append(round(self.A * np.cos(pfi), 2))
-                self.Energy +=round((self.A * np.cos(pfi))**2, 2)
+                self.Energy += round((self.A * np.cos(pfi)) ** 2, 2)
             else:
                 counts.append(0)
         if counts == [0] * len(counts):
             self.fd *= 2
             self.create_counts()
         print(f"===================={self.Energy}===============")
-        self.Energy /= 10**6 # тк мВ*мв
+        self.Energy /= 10 ** 6  # тк мВ*мв
         self.counts = [time, counts]
         return time, counts
-
-

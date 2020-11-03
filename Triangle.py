@@ -4,7 +4,7 @@ from Signal import Signal
 
 
 class Triangle(Signal):
-    def __init__(self, sigma=2):
+    def __init__(self, sigma=0.001028205891675227):
         super().__init__(name="Треугольный импульс")
         self.sigma = sigma
 

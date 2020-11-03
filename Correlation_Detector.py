@@ -8,6 +8,8 @@ from scipy.stats import norm
 from Cos import Cos
 from Noise import Noise
 from scipy.stats import norm
+
+
 class Correlation_Detector(Signal):
     def __init__(self, function):
         self.function = function()
@@ -25,8 +27,6 @@ class Correlation_Detector(Signal):
 
         self.dir_name = "Photo"
         self.my_path = os.path.join(os.path.abspath(__file__), self.dir_name)
-
-
 
     def recovery_kotelnikov(self):
         """
@@ -83,7 +83,7 @@ class Correlation_Detector(Signal):
              count_3=self.function.counts_with_noise[1], t_count_3=self.function.counts_with_noise[0],
              title=f"Воздействие помехи на {self.function.name}",
              name=self.function.name, main_dir_name="Корреляционный обнаружитель",
-             flabel=f"ОСШ = {(self.function.Energy/self.function.sigma**2)**0.5}").draw()
+             flabel=f"ОСШ = {(self.function.Energy / self.function.sigma ** 2) ** 0.5}").draw()
         Draw(self.corr[1], self.corr[0],
              title=f'После коррелятора {self.function.name}',
              xlabel="смещение копии на tau [мс]",
@@ -141,34 +141,29 @@ class Correlation_Detector(Signal):
         Характеристика обнаружения
         :return:
         """
-        self.d = [x for x in np.arange(0.01, 10, 1)] #Отношение сигнал/шум
-        sigma = [(self.function.Energy)**0.5/x for x in self.d]
+        self.d = [x for x in np.arange(0.01, 10, 1)]  # Отношение сигнал/шум
+        sigma = [(self.function.Energy) ** 0.5 / x for x in self.d]
+        print(sigma)
         self.detection_characteristic_teory = [[] for _ in range(len(self.a))]
         self.detection_characteristic_praktik = [[] for _ in range(len(self.a))]
-        for q, a_ in enumerate(self.a):#Для разных вероятностей ложной тревоги
-            gamma = [(-1)*norm.ppf(a_)*(s**2*self.function.Energy)**0.5 for s in sigma] #Порог
-            for j in range(len(gamma)):# Теория
-                x = 1 - norm.cdf((gamma[j] - self.function.Energy)/(sigma[j]*self.function.Energy**0.5))
+        for q, a_ in enumerate(self.a):  # Для разных вероятностей ложной тревоги
+            gamma = [(-1) * norm.ppf(a_) * (s ** 2 * self.function.Energy) ** 0.5 for s in sigma]  # Порог
+            for j in range(len(gamma)):  # Теория
+                x = 1 - norm.cdf((gamma[j] - self.function.Energy) / (sigma[j] * self.function.Energy ** 0.5))
                 self.detection_characteristic_teory[q].append(x)
-    
-            for k, s in enumerate(sigma):#Эксперимент
+
+            for k, s in enumerate(sigma):  # Эксперимент
                 f = self.function_obj(sigma=s)
                 f.create_signal()
-                m=0
-                N=1000#кол-во эксп-ов
+                m = 0
+                N = 1000  # кол-во эксп-ов
                 for i in range(N):
-                    sk = [x/1000 for x in f.counts[1]]#Перевод в мВ
-                    xk = Noise(function=sk, sigma=s).add_noise()#Cигнал + шум с sigma=s
+                    sk = [x / 1000 for x in f.counts[1]]  # Перевод в мВ
+                    xk = Noise(function=sk, sigma=s).add_noise()  # Cигнал + шум с sigma=s
                     T = 0
                     for j in range(len(xk)):
-                        T += sk[j]*xk[j]
+                        T += sk[j] * xk[j]
                     y = gamma[k]
                     if T > y:
-                        m+=1
-                self.detection_characteristic_praktik[q].append(m/N)
-
-
-    
-
-
-
+                        m += 1
+                self.detection_characteristic_praktik[q].append(m / N)

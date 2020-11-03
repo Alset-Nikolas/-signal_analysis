@@ -26,8 +26,9 @@ class Signal:
         self.counts_with_noise = [None, None]
 
     def add_noise(self, sigma):
-        noise = Noise(function=self.analog[1], sigma=sigma)
-        f_noise = noise.add_noise()
+        analog_real = [x/1000 for x in self.analog[1]]
+        f_noise = Noise(function=analog_real, sigma=sigma).add_noise()
+        f_noise = [x * 1000 for x in f_noise]
         self.analog_with_noise = self.analog[0], f_noise
         self.counts_with_noise = self.analog[0][::100], f_noise[::100]
         return self.analog_with_noise, self.counts_with_noise
