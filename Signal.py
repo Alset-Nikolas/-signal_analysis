@@ -1,14 +1,15 @@
 from Noise import Noise
 
+
 class Signal:
     def __init__(self, name, phase=0):
         self.name = name
-        self.A = 1
+        self.A = 1  # мВ
         self.fs = 1  # кГц
         self.phase = phase
-        self.f = 4
+        self.f = 4  # кГц
         self.fd = self.f * 2  # кГц
-        self.T = 1 / self.fd
+        self.T = 1 / self.fd  # мс
         self.tau = 2.0  # мс
 
         self.t_start = 2  # мс
@@ -26,7 +27,7 @@ class Signal:
         self.counts_with_noise = [None, None]
 
     def add_noise(self, sigma):
-        analog_real = [x/1000 for x in self.analog[1]]
+        analog_real = [x / 1000 for x in self.analog[1]]
         f_noise = Noise(function=analog_real, sigma=sigma).add_noise()
         f_noise = [x * 1000 for x in f_noise]
         self.analog_with_noise = self.analog[0], f_noise
@@ -73,7 +74,7 @@ class Signal:
 
             Мощность сигнала P = {self.Energy} [Вт]
             sigma = {self.sigma}
-            osh = {(self.Energy/self.sigma**2)**0.5}
+            osh = {(self.Energy / self.sigma ** 2) ** 0.5}
     ===============================================================================
     ===============================================================================
     ===============================================================================

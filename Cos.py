@@ -49,7 +49,6 @@ class Cos(Signal):
         if counts == [0] * len(counts):
             self.fd *= 2
             self.create_counts()
-        print(f"===================={self.Energy}===============")
         self.Energy /= 10 ** 6  # тк мВ*мв
         self.counts = [time, counts]
         return time, counts

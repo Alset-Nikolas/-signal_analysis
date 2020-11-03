@@ -83,7 +83,7 @@ class Correlation_Detector(Signal):
              count_3=self.function.counts_with_noise[1], t_count_3=self.function.counts_with_noise[0],
              title=f"Воздействие помехи на {self.function.name}",
              name=self.function.name, main_dir_name="Корреляционный обнаружитель",
-             flabel=f"ОСШ = {(self.function.Energy / self.function.sigma ** 2) ** 0.5}").draw()
+             flabel=f"ОСШ = {round((self.function.Energy / self.function.sigma ** 2) ** 0.5,1)}").draw()
         Draw(self.corr[1], self.corr[0],
              title=f'После коррелятора {self.function.name}',
              xlabel="смещение копии на tau [мс]",
@@ -143,7 +143,6 @@ class Correlation_Detector(Signal):
         """
         self.d = [x for x in np.arange(0.01, 10, 1)]  # Отношение сигнал/шум
         sigma = [(self.function.Energy) ** 0.5 / x for x in self.d]
-        print(sigma)
         self.detection_characteristic_teory = [[] for _ in range(len(self.a))]
         self.detection_characteristic_praktik = [[] for _ in range(len(self.a))]
         for q, a_ in enumerate(self.a):  # Для разных вероятностей ложной тревоги
@@ -167,3 +166,4 @@ class Correlation_Detector(Signal):
                     if T > y:
                         m += 1
                 self.detection_characteristic_praktik[q].append(m / N)
+

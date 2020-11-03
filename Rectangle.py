@@ -4,7 +4,7 @@ from Signal import Signal
 
 
 class Rectangle(Signal):
-    def __init__(self, sigma=0.001028205891675227):
+    def __init__(self, sigma=0.001):
         super().__init__(name="Прямоугольный импульс")
         self.sigma = sigma
 
