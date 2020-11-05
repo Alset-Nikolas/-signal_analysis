@@ -85,13 +85,14 @@ class Correlation_Detector(Signal):
              name=self.function.name, main_dir_name="Корреляционный обнаружитель",
              flabel=f"ОСШ = {round((self.function.Energy / self.function.sigma ** 2) ** 0.5,1)}").draw()
         Draw(self.corr[1], self.corr[0],
+             func_2=[self.gamma*10**6]*len(self.corr[0]), time_2=self.corr[0],
              title=f'После коррелятора {self.function.name}',
-             xlabel="смещение копии на tau [мс]",
+             xlabel="смещение копии на tau [мс]", ylabel="V [мкВ]",
              name=self.function.name,
              main_dir_name="Корреляционный обнаружитель").draw()
         Draw(self.hypothesis[1], self.hypothesis[0],
              title=f'Принятие решения {self.function.name}',
-             xlabel="смещение копии на tau [мс]",
+             xlabel="смещение копии на tau [мс]",ylabel="Есть/Нету",
              name=self.function.name,
              main_dir_name="Корреляционный обнаружитель").draw()
 
@@ -107,8 +108,8 @@ class Correlation_Detector(Signal):
              main_dir_name="Корреляционный обнаружитель").draw()
 
     def cor(self):
-        x = [0] * 55 + list(self.function.counts_with_noise[1]) + [0] * 10
-        s = self.function.counts[1]
+        x = [0] * 55 + [x/1000 for x in list(self.function.counts_with_noise[1])] + [0] * 10
+        s = [x/1000 for x in self.function.counts[1]]
         time = np.arange(self.function.start_piece - 55 * self.function.T,
                          self.function.end_piece + 11 * self.function.T, self.function.T)
         corr = []
@@ -120,13 +121,15 @@ class Correlation_Detector(Signal):
                 else:
                     sum += si * x[j + i]
             corr.append(sum)
+        corr =[x*10**6 for x in corr]
         self.corr = time, corr
 
     def porog(self):
         self.gamma = self.count_gamma()
         hypothesis = []
         for x in self.corr[1]:
-            if x > self.gamma:
+            x /=10**6
+            if x >= self.gamma:
                 hypothesis.append(1)
             else:
                 hypothesis.append(0)
