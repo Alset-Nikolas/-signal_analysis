@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from Cos import Cos
+from Noise import Noise
 from Rectangle import Rectangle
 from Triangle import Triangle
 from Optimal_Detector import Optimal_Detector
@@ -12,5 +13,6 @@ print("=" * 100)
 Correlation_Detector(function=Cos).study()
 Correlation_Detector(function=Triangle).study()
 Correlation_Detector(function=Rectangle).study()
+Noise().show_noise()
 # Optimal_Detector().study()
 plt.show()

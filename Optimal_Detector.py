@@ -3,6 +3,8 @@ from mpmath import besseli
 import numpy as np
 from Draw import Draw
 from scipy import special
+
+from Noise import Noise
 from Signal import Signal
 from Cos import Cos
 
@@ -102,6 +104,8 @@ class Optimal_Detector(Signal):
              title=f"Принятие решения {self.function.name}",
              name=self.function.name, main_dir_name="Оптимальный обнаружитель при некогерентном приеме",
              flabel=f"Фаза {int(self.phase_grad)} градусов", ).draw()
+
+
 
     def detection_characteristic(self):
         ash = (self.function.A*10**-3)**2

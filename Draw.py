@@ -41,7 +41,10 @@ class Draw:
         self.t_count_3 = t_count_3
 
         self.main_dir_name = main_dir_name
-        self.dir_name = os.path.join(self.main_dir_name, self.name)
+        if self.name is None:
+            self.dir_name = self.main_dir_name
+        else:
+            self.dir_name = os.path.join(self.main_dir_name, self.name)
         self.my_path = os.path.join(os.path.abspath(os.curdir), self.dir_name)
 
     def draw(self):
@@ -63,7 +66,6 @@ class Draw:
             plt.plot(self.time_2, self.func_2, '-', c="orange",  label=self.flabel_2)
         if self.func_3 is not None and self.time_3 is not None:
             plt.plot(self.time_3, self.func_3, '-', c="red", label=self.flabel_3)
-
 
         if self.title:
             plt.title(self.title)

@@ -16,7 +16,7 @@ class Correlation_Detector(Signal):
         self.function_obj = function
         self.corr = [None, None]
 
-        self.alfa = 0.5
+        self.alfa = 0.2
         self.gamma = None
         self.hypothesis = [None, None]
 
@@ -86,6 +86,7 @@ class Correlation_Detector(Signal):
              flabel=f"ОСШ = {round((self.function.Energy / self.function.sigma ** 2) ** 0.5,1)}").draw()
         Draw(self.corr[1], self.corr[0],
              func_2=[self.gamma*10**6]*len(self.corr[0]), time_2=self.corr[0],
+             flabel=f"При вероятности ложной тревоги = {self.alfa}",
              title=f'После коррелятора {self.function.name}',
              xlabel="смещение копии на tau [мс]", ylabel="V [мкВ]",
              name=self.function.name,
