@@ -18,7 +18,7 @@ class Optimal_Detector(Signal):
         self.w = 2 * np.pi * self.function.fs
 
         self.hypothesis = [None, None]
-        self.alfa = 0.2
+        self.alfa = 0.02
         self.gamma = None
         self.gamma_level = None
         self.corr = [None, None]

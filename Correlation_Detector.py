@@ -70,7 +70,7 @@ class Correlation_Detector(Signal):
         Draw(func=self.function.analog[1], time=self.function.analog[0],
              count_3=self.function.counts[1], t_count_3=self.function.counts[0],
              title=f"Исходный сигнал {self.function.name}",
-             xlabel="t [мс]", ylabel="V [В]",
+             xlabel="t [мс]", ylabel="V [мВ]",
              name=self.function.name,
              main_dir_name="Корреляционный обнаружитель").draw()
         '''
@@ -104,7 +104,7 @@ class Correlation_Detector(Signal):
              count_2=self.detection_characteristic_praktik[1], t_count_2=self.d,
              count_3=self.detection_characteristic_praktik[2], t_count_3=self.d,
              title=f'Характеристика обнаружения {self.function.name}',
-             xlabel="ОСШ", ylabel="Характеристика обнаружения",
+             xlabel="ОСШ [разы]", ylabel="Характеристика обнаружения [%]",
              name=self.function.name,
              main_dir_name="Корреляционный обнаружитель").draw()
 
@@ -146,7 +146,7 @@ class Correlation_Detector(Signal):
         :return:
         """
         self.d = [x for x in np.arange(0.01, 10, 1)]  # Отношение сигнал/шум
-        sigma = [(self.function.Energy) ** 0.5 / x for x in self.d]
+        sigma = [(self.function.Energy*self.function.f) ** 0.5 / x for x in self.d]
         self.detection_characteristic_teory = [[] for _ in range(len(self.a))]
         self.detection_characteristic_praktik = [[] for _ in range(len(self.a))]
         for q, a_ in enumerate(self.a):  # Для разных вероятностей ложной тревоги

@@ -61,5 +61,7 @@ class Noise:
         fig.savefig(os.path.join(my_path, name_save))
 
 
+if __name__ == "__main__":
 
-Noise(sigma=0.1).show_noise()
+    Noise(sigma=0.1).show_noise()
+    plt.show()

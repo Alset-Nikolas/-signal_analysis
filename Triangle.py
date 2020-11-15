@@ -7,6 +7,7 @@ class Triangle(Signal):
     def __init__(self, sigma=0.001):
         super().__init__(name="Треугольный импульс")
         self.sigma = sigma
+        self.A = 1.78
 
     def create_signal(self):
         self.create_counts()
