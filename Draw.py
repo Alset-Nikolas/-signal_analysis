@@ -74,8 +74,12 @@ class Draw:
         ax.grid()
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
-        name_save = self.title + '.png'
-        fig.savefig(os.path.join(self.my_path, name_save))
+        if self.name is not None:
+            name_save = self.title + '.png'
+            fig.savefig(os.path.join(self.my_path, name_save))
+        else:
+            plt.show()
+
 
     def file_creation(self):
         if not os.path.exists(self.main_dir_name):

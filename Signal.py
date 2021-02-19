@@ -2,7 +2,7 @@ from Noise import Noise
 
 
 class Signal:
-    def __init__(self, name, phase=0):
+    def __init__(self, name, phase=0,start_piece=0, t_start=2, t_end=4, end_piece=6):
         self.name = name
         self.A = 1  # мВ
         self.fs = 1  # кГц
@@ -12,11 +12,11 @@ class Signal:
         self.T = 1 / self.fd  # мс
         self.tau = 2.0  # мс
 
-        self.t_start = 2  # мс
-        self.t_end = self.t_start + self.tau
+        self.t_start = t_start  # мс
+        self.t_end = t_end
 
-        self.start_piece = 0
-        self.end_piece = self.t_start + 2 * self.tau
+        self.start_piece = start_piece
+        self.end_piece = end_piece
 
         self.Energy = 0
         self.M = 0

@@ -1,13 +1,16 @@
 import numpy as np
+
+from Draw import Draw
 from Signal import Signal
 
 
 class Cos(Signal):
     """ Создает обьект косинус"""
 
-    def __init__(self, phase=0, sigma=0.001):
-        super().__init__(name="Гармонический сигнал", phase=phase)
+    def __init__(self, t_start=2, sigma=0.001, **kwargs):
+        super().__init__(name="Гармонический сигнал", **kwargs)
         self.sigma = sigma
+        self.t_start = t_start
 
     def create_signal(self):
         self.create_counts()
@@ -19,10 +22,10 @@ class Cos(Signal):
                     Создадим аналоговый сигнал
                     :return t, s(t) = A*cos(2*pi*f*t)
         """
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T / 100)
+        time = np.arange(self.start_piece, self.end_piece, self.T / 100)
         analog_cos = []
         for t in time:
-            if self.t_start <= t <= self.t_start + self.tau:
+            if self.t_start <= t <= self.t_end:
                 pfi = 2 * np.pi * self.fs * t + self.phase
                 analog_cos.append(round(self.A * np.cos(pfi), 5))
             else:
@@ -40,15 +43,22 @@ class Cos(Signal):
         time = np.arange(self.start_piece, self.end_piece + self.T, self.T)
         for t in time:
             self.M += 1
-            if self.t_start <= t <= self.t_start + self.tau:
+            if self.t_start <= t <= self.t_end:
                 pfi = 2 * np.pi * self.fs * t + self.phase
                 counts.append(round(self.A * np.cos(pfi), 2))
                 self.Energy += round((self.A * np.cos(pfi)) ** 2, 2)
             else:
                 counts.append(0)
-        if counts == [0] * len(counts):
-            self.fd *= 2
-            self.create_counts()
+
         self.Energy /= 10 ** 6  # тк мВ*мв
         self.counts = [time, counts]
         return time, counts
+
+    def show_cos(self):
+        Draw(func=self.analog[1], time=self.analog[0],
+             count_3=self.counts[1], t_count_3=self.counts[0],
+             title=f"Исходный сигнал {self.name}",
+             xlabel="t [мс]", ylabel="V [мВ]",
+             main_dir_name="Корреляционный обнаружитель").draw()
+
+

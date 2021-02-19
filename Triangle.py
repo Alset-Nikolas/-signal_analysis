@@ -4,8 +4,8 @@ from Signal import Signal
 
 
 class Triangle(Signal):
-    def __init__(self, sigma=0.001):
-        super().__init__(name="Треугольный импульс")
+    def __init__(self, sigma=0.001, **kwargs):
+        super().__init__(name="Треугольный импульс", **kwargs)
         self.sigma = sigma
         self.A = 1.78
 
@@ -19,7 +19,7 @@ class Triangle(Signal):
             Создадим Прямоугольный импульс
             :return массив времени и отсчетов прямоугольного импульса
         """
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T)
+        time = np.arange(self.start_piece, self.end_piece, self.T)
         counts = []
         t_center = (2 * self.t_start +
                     self.tau) // 2
@@ -49,7 +49,7 @@ class Triangle(Signal):
         """
                     Создадим аналоговый сигнал
         """
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T / 100)
+        time = np.arange(self.start_piece, self.end_piece+self.T, self.T / 100)
         counts = []
         t_center = (2 * self.t_start +
                     self.tau) // 2

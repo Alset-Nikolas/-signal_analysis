@@ -1,18 +1,15 @@
 import os
-import matplotlib.pyplot as plt
 import numpy as np
 from Draw import Draw
 from scipy import special
 from Signal import Signal
-from scipy.stats import norm
-from Cos import Cos
 from Noise import Noise
 from scipy.stats import norm
 
 
 class Correlation_Detector(Signal):
-    def __init__(self, function):
-        self.function = function()
+    def __init__(self, function, **kwargs):
+        self.function = function(**kwargs)
         self.function_obj = function
         self.corr = [None, None]
 
@@ -57,13 +54,11 @@ class Correlation_Detector(Signal):
 
     def study(self):
         """Запуск"""
-
         self.function.create_signal()
         # self.recovery_kotelnikov()
-        self.cor()
+        self.acor()
         self.porog()
         self.detection_characteristic()
-
         self.show_pictures()
 
     def draw(self):
@@ -108,11 +103,11 @@ class Correlation_Detector(Signal):
              name=self.function.name,
              main_dir_name="Корреляционный обнаружитель").draw()
 
-    def cor(self):
+    def acor(self):
         x = [0] * 55 + [x/1000 for x in list(self.function.counts_with_noise[1])] + [0] * 10
         s = [x/1000 for x in self.function.counts[1]]
-        time = np.arange(self.function.start_piece - 55 * self.function.T,
-                         self.function.end_piece + 11 * self.function.T, self.function.T)
+        time = np.arange(self.function.t_start - 55 * self.function.T,
+                         self.function.t_end + 11 * self.function.T, self.function.T)
         corr = []
         for i, t in enumerate(time):
             sum = 0
@@ -124,6 +119,7 @@ class Correlation_Detector(Signal):
             corr.append(sum)
         corr =[x*10**6 for x in corr]
         self.corr = time, corr
+
 
     def porog(self):
         self.gamma = self.count_gamma()
@@ -170,4 +166,6 @@ class Correlation_Detector(Signal):
                     if T > y:
                         m += 1
                 self.detection_characteristic_praktik[q].append(m / N)
+
+
 

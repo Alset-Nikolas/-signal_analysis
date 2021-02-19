@@ -4,8 +4,8 @@ from Signal import Signal
 
 
 class Rectangle(Signal):
-    def __init__(self, sigma=0.001):
-        super().__init__(name="Прямоугольный импульс")
+    def __init__(self, sigma=0.001, **kwargs):
+        super().__init__(name="Прямоугольный импульс", **kwargs)
         self.sigma = sigma
 
     def create_signal(self):
@@ -19,7 +19,7 @@ class Rectangle(Signal):
             :return массив времени и отсчетов прямоугольного импульса
         """
         counts = []
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T)
+        time = np.arange(self.start_piece, self.end_piece+self.T, self.T)
         for t in time:
             self.M += 1
             if self.t_start <= t <= self.t_start + self.tau:
@@ -40,9 +40,9 @@ class Rectangle(Signal):
                     Создадим аналоговый сигнал
         """
         counts = []
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T / 100)
+        time = np.arange(self.start_piece, self.end_piece, self.T / 100)
         for t in time:
-            if self.t_start <= t <= self.t_start + self.tau:
+            if self.t_start <= t <= self.t_end:
                 counts.append(self.A)
             else:
                 counts.append(0)
