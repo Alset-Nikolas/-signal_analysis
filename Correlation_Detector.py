@@ -143,6 +143,7 @@ class Correlation_Detector(Signal):
         """
         self.d = [x for x in np.arange(0.01, 10, 1)]  # Отношение сигнал/шум
         sigma = [(self.function.Energy*self.function.f) ** 0.5 / x for x in self.d]
+        print(sigma)
         self.detection_characteristic_teory = [[] for _ in range(len(self.a))]
         self.detection_characteristic_praktik = [[] for _ in range(len(self.a))]
         for q, a_ in enumerate(self.a):  # Для разных вероятностей ложной тревоги

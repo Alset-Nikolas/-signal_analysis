@@ -19,8 +19,8 @@ print("=" * 100)
 n = 2
 if n == 1:
     Correlation_Detector(function=Cos, start_piece=0, t_start=2, t_end=4, end_piece=6).study()
-    Correlation_Detector(function=Triangle, start_piece=0, t_start=2, t_end=4, end_piece=6).study()
-    Correlation_Detector(function=Rectangle, start_piece=0, t_start=2, t_end=4, end_piece=6).study()
-    Noise().show_noise()
+    #Correlation_Detector(function=Triangle, start_piece=0, t_start=2, t_end=4, end_piece=6).study()
+    #Correlation_Detector(function=Rectangle, start_piece=0, t_start=2, t_end=4, end_piece=6).study()
+    #Noise().show_noise()
 if n == 2:
     Optimal_Detector().run()
