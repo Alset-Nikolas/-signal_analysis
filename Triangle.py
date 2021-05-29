@@ -4,7 +4,7 @@ from Signal import Signal
 
 
 class Triangle(Signal):
-    def __init__(self, sigma=0.001, **kwargs):
+    def __init__(self, sigma=1, **kwargs):
         super().__init__(name="Треугольный импульс", **kwargs)
         self.sigma = sigma
         self.A = 1.78
@@ -42,7 +42,7 @@ class Triangle(Signal):
             self.fd *= 2
             self.create_counts()
         self.counts = [time, counts]
-        self.Energy /= 10 ** 6  # тк мВ*мв
+        #self.Energy /= 10 ** 6  # тк мВ*мв
         return time, counts
 
     def create_analog(self):

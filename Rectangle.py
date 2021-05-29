@@ -4,7 +4,7 @@ from Signal import Signal
 
 
 class Rectangle(Signal):
-    def __init__(self, sigma=0.001, **kwargs):
+    def __init__(self, sigma=1, **kwargs):
         super().__init__(name="Прямоугольный импульс", **kwargs)
         self.sigma = sigma
 
@@ -22,7 +22,7 @@ class Rectangle(Signal):
         time = np.arange(self.start_piece, self.end_piece+self.T, self.T)
         for t in time:
             self.M += 1
-            if self.t_start <= t <= self.t_start + self.tau:
+            if self.t_start <= t <= self.t_end:
                 counts.append(self.A)
                 self.Energy += round(self.A ** 2, 2)
             else:
@@ -32,7 +32,7 @@ class Rectangle(Signal):
             self.create_counts()
 
         self.counts = [time, counts]
-        self.Energy /= 10 ** 6  # тк мВ*мв
+        #self.Energy /= 10 ** 6  # тк мВ*мв
         return time, counts
 
     def create_analog(self):

@@ -8,11 +8,11 @@ from Draw import Draw
 
 
 class Noise:
-    def __init__(self, function=[], sigma=0.01):
+    def __init__(self, function=[], sigma=0.7):
         self.m = 0
         self.sigma = sigma
         self.N = len(function)
-        self.noise = self.sigma * np.random.randn(self.N) + self.m
+        self.noise = self.sigma /8000 * np.random.randn(self.N) + self.m
         self.function = function[:]
         self.E_noise = sum(self.noise ** 2)
 
@@ -41,7 +41,7 @@ class Noise:
 
         if self.N == 0:
             self.N = 100000
-            self.sigma = 0.01
+            self.sigma = 0.7
             self.m = 0
 
         s = self.sigma * np.random.randn(self.N) + self.m

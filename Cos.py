@@ -40,7 +40,7 @@ class Cos(Signal):
                    :return t[k], s(t[k])
         """
         counts = []
-        time = np.arange(self.start_piece, self.end_piece + self.T, self.T)
+        time = np.arange(self.start_piece, self.end_piece, self.T)
         for t in time:
             self.M += 1
             if self.t_start <= t <= self.t_end:
@@ -50,7 +50,6 @@ class Cos(Signal):
             else:
                 counts.append(0)
 
-        self.Energy /= 10 ** 6  # тк мВ*мв
         self.counts = [time, counts]
         return time, counts
 
