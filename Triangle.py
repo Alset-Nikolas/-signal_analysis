@@ -42,7 +42,6 @@ class Triangle(Signal):
             self.fd *= 2
             self.create_counts()
         self.counts = [time, counts]
-        #self.Energy /= 10 ** 6  # тк мВ*мв
         return time, counts
 
     def create_analog(self):

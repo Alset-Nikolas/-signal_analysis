@@ -24,7 +24,7 @@ class Optimal_Detector(Signal):
         self.time_to_result = []
         self.E =0
         self.alfa = 0.2
-        self.sigma=5
+        self.sigma=0.6
 
         self.information_bit_result = []
         self.information_bit_result_signal = []
@@ -43,10 +43,12 @@ class Optimal_Detector(Signal):
         print(f"{self.information} - представляется в битах - ", self.information_bit)
         self.text_from_bits(bits=self.information_bit)
         self.create_signal()
-        print("ОСШ",self.E**0.5/ self.sigma)
+        self.show_signal_to_send()
+        print("ОСШ",(self.E//len(self.information_bit))**0.5/ self.sigma)
         otvet = self.statik()
         print(f"результат на входе приемника {otvet}")
         self.xarakteristik()
+        self.T()
     def text_to_bits(self, text, encoding='utf-8', errors='surrogatepass'):
         bits = bin(int.from_bytes(text.encode(encoding, errors), 'big'))[2:]
         return str(bits.zfill(8 * ((len(bits) + 7) // 8)))
@@ -85,10 +87,12 @@ class Optimal_Detector(Signal):
     def show_signal_to_send(self):
 
         Draw(func=self.analog_signal_to_send, time=self.time_signal,
+             count=self.counts, t_count=self.time_counts,
              title=f"Передаем текст  - {self.information} - ДО ШУМА",
              xlabel="t [мс]", ylabel="V [мВ]",
              main_dir_name="Корреляционный обнаружитель").draw()
         Draw(func=self.analog_signal_with_noise, time=self.time_signal,
+
              title=f"Передаем текст  - {self.information}  - ПОСЛЕ ШУМА",
              xlabel="t [мс]", ylabel="V [мВ]",
              main_dir_name="Корреляционный обнаружитель").draw()
@@ -112,6 +116,8 @@ class Optimal_Detector(Signal):
         bits=''
         for i in range(len(self.counts)):
             if i % self.N!=0 or i==0:
+                print(len(self.counts), len(Rec_0.counts_with_noise[1]))
+
                 T0 += self.counts[i]*Rec_0.counts_with_noise[1][i//self.N]
                 T1 += self.counts[i] * Rec_1.counts_with_noise[1][i // self.N]
                 T_0.append(T0)
@@ -183,4 +189,23 @@ class Optimal_Detector(Signal):
              count_3=D, t_count_3=d,
              title=f"Вероятность ошибки Pош",
              xlabel="ОСШ[раз]", ylabel="%",).draw()
+
+
+    def T(self):
+        import scipy.stats as stats
+        E=self.E//len(self.information_bit)
+        variance = self.sigma ** 2 * E
+        sigma = variance ** 0.5
+        mu = -E
+        mu_2 = E
+        x = np.linspace(mu - 3 * sigma, mu_2 + 3 * sigma, 100)
+        F1=stats.norm.pdf(x, mu, sigma)
+        F2=stats.norm.pdf(x, mu_2, sigma)
+
+        Draw(F1, x, flabel=f"ПРВ H0 N({-int(E)}, {int(self.sigma**2*E)})",
+             func_2=F2, time_2=x, flabel_2=f"ПРВ H1 N({int(E)}, {int(self.sigma**2*E)})",
+             title="Условное ПРВ",
+             xlabel="T", ylabel="W(T|H)",).draw()
+        v
+        plt.show()
 

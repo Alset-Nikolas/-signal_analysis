@@ -14,7 +14,7 @@ class Correlation_Detector(Signal):
         self.function_obj = function
         self.corr = [None, None]
 
-        self.alfa = 0.2
+        self.alfa = 0.1
         self.gamma = None
         self.hypothesis = [None, None]
 
@@ -34,7 +34,8 @@ class Correlation_Detector(Signal):
         self.porog()
         self.detection_characteristic()
         self.show_pictures()
-        self.draw()
+        self.T()
+        #self.draw()
 
     def draw(self):
         Draw(func=self.function.analog[1], time=self.function.analog[0],
@@ -75,8 +76,8 @@ class Correlation_Detector(Signal):
         plt.show()
 
     def acor(self):
-        x = [x*1000 for x in list(Noise([0]*40).add_noise())] + list(self.function.counts_with_noise[1]) + \
-            [x*1000 for x in list(Noise([0]*20).add_noise())]
+        x =   list(Noise(sigma=self.function.sigma).add_noise([0]*40))+ list(self.function.counts_with_noise[1]) + \
+             list(Noise(sigma=self.function.sigma).add_noise([0]*21))
         s = [x for x in self.function.counts[1]]
 
         time = np.arange(self.function.start_piece - 40 * self.function.T,
@@ -105,7 +106,8 @@ class Correlation_Detector(Signal):
         self.hypothesis = self.corr[0], hypothesis
 
     def count_gamma(self):
-        self.gamma = special.erfcinv(self.alfa) * self.function.sigma * self.function.Energy ** 0.5
+
+        self.gamma = -1*special.ndtri(self.alfa) * self.function.sigma * self.function.Energy ** 0.5
         return self.gamma
 
     def detection_characteristic(self):
@@ -143,4 +145,21 @@ class Correlation_Detector(Signal):
 
 
 
+    def T(self):
+        import scipy.stats as stats
 
+        variance = self.function.sigma ** 2 * self.function.Energy
+        sigma = variance ** 0.5
+        mu = 0
+        mu_2 = self.function.Energy
+        x = np.linspace(mu - 3 * sigma, mu_2 + 3 * sigma, 100)
+        F1=stats.norm.pdf(x, mu, sigma)
+        F2=stats.norm.pdf(x, mu_2, sigma)
+
+        Draw(F1, x, flabel=f"ПРВ H0 N(0, {int(self.function.sigma**2*self.function.Energy)})",
+             func_2=F2, time_2=x, flabel_2=f"ПРВ H1 N({int(self.function.Energy)}, {int(self.function.sigma**2*self.function.Energy)})",
+             func_3=[0, 0.15], time_3=[self.count_gamma()]*2, flabel_3="Порог",
+             title="Условное ПРВ",
+             xlabel="T", ylabel="W(T|H)",
+             name=self.function.name,).draw()
+        plt.show()

@@ -8,19 +8,12 @@ from Draw import Draw
 
 
 class Noise:
-    def __init__(self, function=[], sigma=0.7):
+    def __init__(self, sigma=0.7):
         self.m = 0
         self.sigma = sigma
-        self.N = len(function)
-        self.noise = self.sigma /8000 * np.random.randn(self.N) + self.m
-        self.function = function[:]
-        self.E_noise = sum(self.noise ** 2)
 
-    def add_noise(self):
-        for i in range(self.N):
-            self.function[i] += self.noise[i]
-
-        return self.function
+    def add_noise(self, function):
+        return [x+y for x, y in zip(function, self.sigma * np.random.randn(len(function)))]
 
     def print_data_noise(self):
         text = f'''
@@ -39,10 +32,10 @@ class Noise:
 
     def show_noise(self):
 
-        if self.N == 0:
-            self.N = 100000
-            self.sigma = 0.7
-            self.m = 0
+
+        self.N = 100000
+        self.sigma = 0.65
+        self.m = 0
 
         s = self.sigma * np.random.randn(self.N) + self.m
         fig, ax = plt.subplots()

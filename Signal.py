@@ -1,14 +1,15 @@
 from Noise import Noise
+import numpy as np
 
 
 class Signal:
-    def __init__(self, name, phase=0,start_piece=0, t_start=2, t_end=4, end_piece=6, A=1, f=4):
+    def __init__(self, name, phase=0,start_piece=0, t_start=2, t_end=4, end_piece=6, A=1, f=1):
         self.name = name
         self.A = A  # мВ
-        self.fs = 1  # кГц
+        self.fs = f  # кГц
         self.phase = phase
-        self.f = f  # кГц
-        self.fd = self.f * 2  # кГц
+        self.f = 4  # кГц
+        self.fd = 2*self.f# кГц
         self.T = 1 / self.fd  # мс
         self.tau = 2.0  # мс
 
@@ -27,11 +28,8 @@ class Signal:
         self.counts_with_noise = [None, None]
 
     def add_noise(self, sigma):
-        analog_real = [x / 1000 for x in self.analog[1]]
-        f_noise = Noise(function=analog_real, sigma=sigma).add_noise()
-        f_noise = [x * 1000 for x in f_noise]
-        self.analog_with_noise = self.analog[0], f_noise
-        self.counts_with_noise = self.analog[0][::100], f_noise[::100]
+        self.analog_with_noise = self.analog[0], Noise(sigma=sigma).add_noise(function=self.analog[1])
+        self.counts_with_noise = self.counts[0], Noise(sigma=sigma).add_noise(function=self.counts[1])
         return self.analog_with_noise, self.counts_with_noise
 
     def check_entered_data(self):
@@ -72,7 +70,7 @@ class Signal:
             1/fd = {self.T} [мс]
             Длительность импулсьа tau = {self.tau} (c {self.t_start} до {self.t_start + self.tau}) [мс]
 
-            Мощность сигнала P = {self.Energy} [Вт]
+            Энергия сигнала P = {self.Energy} [Вт]
             sigma = {self.sigma}
             osh = {(self.Energy / self.sigma ** 2) ** 0.5}
     ===============================================================================
